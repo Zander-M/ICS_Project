@@ -4,7 +4,7 @@ import select
 import sys
 import json
 from chat_utils import *
-import client_state_machine_student as csm
+import client_state_machine as csm # import client_state_machine_student as csm
 
 import threading
 
