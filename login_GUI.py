@@ -9,27 +9,36 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.widget import Widget
 from kivy.uix.scrollview import ScrollView
 from kivy.lang import Builder
+from kivy.uix.screenmanager import Screen, ScreenManager
 
-Builder.load_file("kv\\login.kv") # test login
+Builder.load_file("kv\\chat_system.kv") # test login
 # Builder.load_file("kv\\command.kv") # test command
 # Builder.load_file("kv\\sonnet.kv") # test sonnet
 # Builder.load_file("kv\\chatting.kv")
 class loginIcon(Widget):
     pass
 
-class loginPanel(GridLayout):
+class login(Screen):
     # log in stage panel
     pass
 
-class commandPanel(GridLayout):
+class command(Screen):
     # logged in stage panel
     pass
 
-class chattingPanel(GridLayout):
+class chatting(Screen):
     # chatting stage panel
-    def __init__(self, **kwarg):
-        super(chattingPanel, self).__init__(**kwarg)
-        pass
+    pass
+
+class sonnet(Screen):
+    # sonnet stage panel
+    pass
+    
+sm = ScreenManager()
+sm.add_widget(login(name='login'))
+sm.add_widget(command(name='command'))
+sm.add_widget(chatting(name='chatting'))
+sm.add_widget(sonnet(name='sonnet'))
 
 class mainCanvas(Widget):
     # this is the main canvas handling tasks
@@ -41,10 +50,20 @@ class mainCanvas(Widget):
 class ChatSystem(App):
 
     def build(self):
-        return mainCanvas()
+        return sm
+    
+    def popup(self):
+        pass
     
     def update(self, screen):
-        pass
+        if screen == 0:
+            sm.current('')        
+        elif screen == 1:
+            sm.current('')
+        elif screen == 2:
+            sm.current('')
+        else:
+            pass
 
 
 

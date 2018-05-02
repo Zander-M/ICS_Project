@@ -1,6 +1,6 @@
 #:kivy 1.10.0
 
-<mainCanvas>:
+<chattingPanel>:
     BoxLayout:
         size: root.size
         padding: 20
@@ -19,6 +19,7 @@
 
                 TextInput:
                     font_size: "20sp"
+                    multiline: False
 
                 Button:
                     size_hint_x: None
@@ -33,7 +34,7 @@
                 text: "return"
                 font_size: "20sp"
                 size_hint: None, None
-                pos_hint: {"top": .9, "center_x": .6 }
+                pos_hint: {"top": .9 }
                 height: 60
                 width: 100
         

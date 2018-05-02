@@ -1,0 +1,176 @@
+#:kivy 1.10.0
+
+<login>:
+    size: root.size
+
+    Label:
+        font_size: 40 
+        pos: (0, 150)
+        text: "Welcome to ICS Chat System!"
+
+    BoxLayout:
+        orientation: "vertical"
+        size_hint: None, None
+        width: 500
+        spacing: 10
+        center_x: root.width / 2
+        center_y: root.height / 2
+        canvas:
+            Color:
+                rgb: .3, .3, .3
+            
+            Rectangle:
+                size: self.width + 20, self.height + 40
+                pos: self.x - 10, self.y - 20
+
+        GridLayout:
+            cols: 2
+            size_hint_y: None
+            height: 40
+
+
+            Label:
+                text:"Username: "
+                size_hint_x: .25
+                font_size: "20sp"
+
+            TextInput:
+                size_hint_x: .75
+                font_size: '20sp'
+                center_x: root.width / 2
+                multiline: False
+        Button:
+            id: 'login'
+            text: "Log in"
+            font_size: "20sp"
+            size_hint: None, None
+            width: 200
+            height: 50
+            pos_hint:{"center_x": 0.5}
+            on_press: root.manager.current = 'command'
+<command>:
+    size: root.size
+
+    BoxLayout:
+        orientation: "horizontal"
+        size: root.size
+        BoxLayout:
+            
+            Label:                            
+                text:'''Hello, Zander\nWhat do you want to do?'''
+                font_size: '40sp'
+                halign: 'left'
+            
+
+        GridLayout:
+            size_hint: .4, .8
+            pos_hint: {'right': 1}
+            cols: 1
+            width: 300
+            height: 40
+            pos_hint: {"center_y": .5}
+            spacing: 10
+            padding: 20
+
+            Button:
+                text: "Chat"
+                font_size: "20sp"
+            
+            Button:
+                text: "History"
+                font_size: "20sp" 
+
+            Button:
+                text: "?"
+                font_size: "20sp" 
+
+            Button:
+                text: "Sonnets"
+                font_size: "20sp" 
+
+            Button:
+                text: "Quit"
+                font_size: "20sp"        
+                on_press: root.manager.current = 'sonnet'   
+                
+<sonnet>:
+    size: root.size
+    BoxLayout:
+        orientation: "horizontal"
+        size: root.size
+
+        AnchorLayout:
+            size: root.size
+            
+            # canvas: 
+            #     Color:
+            #         rgb: 1, 0, 0
+            #     Rectangle:
+            #         size: self.size
+            Label:
+                text: "Sonnet"
+                font_size: "40sp"
+                anchor_x: 'center'
+                anchor_y: 'top'
+                
+            Label:
+                anchor_x: 'center'
+                anchor_y: 'center'
+                text: "fjdasklfjdksjkl\nfjkdlasjfkldsajfkdj\nfjdasjfkldsajfldksaj\nfjdskalfjdklsajfdkl"
+                font_size: "20sp"
+        
+        BoxLayout:
+            size_hint_x: .25
+            
+            Button:
+                text: "return"
+                font_size: "20sp"
+                size_hint: None, None
+                pos_hint: {"top": .9, "center_x": .6 }
+                height: 60
+                width: 100
+                on_press: root.manager.current = 'chatting'
+                
+<chatting>:
+    size: root.size
+
+    BoxLayout:
+        size: root.size
+        padding: 20
+        spacing: 20
+
+        GridLayout:
+            cols:1
+            spacing: 20
+            ScrollView:
+                TextInput:
+
+            GridLayout:
+                size_hint_y: None
+                height: 40
+                cols: 2
+
+                TextInput:
+                    font_size: "20sp"
+                    multiline: False
+
+                Button:
+                    size_hint_x: None
+                    width: 100
+                    text:'Send'
+                    font_size: "20sp"
+            
+        BoxLayout:
+            size_hint_x: .25
+            
+            Button:
+                text: "return"
+                font_size: "20sp"
+                size_hint: None, None
+                pos_hint: {"top": .9 }
+                height: 60
+                width: 100
+                on_press: root.manager.current = 'login'
+        
+
+ 

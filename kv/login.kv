@@ -1,6 +1,6 @@
 #:kivy 1.10.0
 
-<mainCanvas>:
+<loginPanel>:
 
     Label:
         size_hint_y: None
@@ -39,8 +39,9 @@
                 size_hint_x: .75
                 font_size: '20sp'
                 center_x: root.width / 2
-
+                multiline: False
         Button:
+            id: 'login'
             text: "Log in"
             font_size: "20sp"
             size_hint: None, None

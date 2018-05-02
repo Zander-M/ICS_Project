@@ -9,7 +9,7 @@ import client_state_machine as csm # import client_state_machine_student as csm
 import threading
 
 class Client:
-    def __init__(self):
+    def __init__(self, args):
         self.peer = ''
         self.console_input = []
         self.state = S_OFFLINE
@@ -26,7 +26,7 @@ class Client:
 
     def init_chat(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM )
-        svr = SERVER # if self.args.d == None else (self.args.d, CHAT_PORT)
+        svr = SERVER # if self.args.d == None else (self.rgs.d, CHAT_PORT)
         self.socket.connect(svr)
         self.sm = csm.ClientSM(self.socket)
         reading_thread = threading.Thread(target=self.read_input)
