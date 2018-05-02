@@ -10,7 +10,7 @@ from kivy.uix.widget import Widget
 from kivy.uix.scrollview import ScrollView
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen, ScreenManager
-
+from kivy.uix.dropdown import DropDown
 Builder.load_file("kv\\chat_system.kv") # test login
 # Builder.load_file("kv\\command.kv") # test command
 # Builder.load_file("kv\\sonnet.kv") # test sonnet
@@ -26,6 +26,9 @@ class command(Screen):
     # logged in stage panel
     pass
 
+class chat_with(Screen):
+    pass
+
 class chatting(Screen):
     # chatting stage panel
     pass
@@ -37,6 +40,7 @@ class sonnet(Screen):
 sm = ScreenManager()
 sm.add_widget(login(name='login'))
 sm.add_widget(command(name='command'))
+sm.add_widget(chat_with(name='chat_with'))
 sm.add_widget(chatting(name='chatting'))
 sm.add_widget(sonnet(name='sonnet'))
 

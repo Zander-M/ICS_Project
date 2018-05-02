@@ -1,7 +1,6 @@
 #:kivy 1.10.0
 
 <login>:
-    size: root.size
 
     Label:
         font_size: 40 
@@ -48,8 +47,8 @@
             height: 50
             pos_hint:{"center_x": 0.5}
             on_press: root.manager.current = 'command'
+
 <command>:
-    size: root.size
 
     BoxLayout:
         orientation: "horizontal"
@@ -75,6 +74,7 @@
             Button:
                 text: "Chat"
                 font_size: "20sp"
+                on_press: root.manager.current = 'chat_with'
             
             Button:
                 text: "History"
@@ -87,61 +87,58 @@
             Button:
                 text: "Sonnets"
                 font_size: "20sp" 
+                on_press: root.manager.current = 'sonnet'
 
             Button:
                 text: "Quit"
                 font_size: "20sp"        
-                on_press: root.manager.current = 'sonnet'   
+                on_press: root.manager.current = 'login'   
                 
 <sonnet>:
-    size: root.size
     BoxLayout:
         orientation: "horizontal"
-        size: root.size
-
-        AnchorLayout:
-            size: root.size
-            
-            # canvas: 
-            #     Color:
-            #         rgb: 1, 0, 0
-            #     Rectangle:
-            #         size: self.size
-            Label:
-                text: "Sonnet"
-                font_size: "40sp"
-                anchor_x: 'center'
-                anchor_y: 'top'
-                
-            Label:
-                anchor_x: 'center'
-                anchor_y: 'center'
-                text: "fjdasklfjdksjkl\nfjkdlasjfkldsajfkdj\nfjdasjfkldsajfldksaj\nfjdskalfjdklsajfdkl"
-                font_size: "20sp"
-        
-        BoxLayout:
-            size_hint_x: .25
-            
-            Button:
-                text: "return"
-                font_size: "20sp"
-                size_hint: None, None
-                pos_hint: {"top": .9, "center_x": .6 }
-                height: 60
-                width: 100
-                on_press: root.manager.current = 'chatting'
-                
-<chatting>:
-    size: root.size
-
-    BoxLayout:
         size: root.size
         padding: 20
         spacing: 20
 
         GridLayout:
             cols:1
+            padding: 20
+
+            Label:
+                text: "Sonnet"
+                font_size: "40sp"
+                size_hint_y: .2
+
+            AnchorLayout:
+                anchor_y: 'top'
+                Label:
+                    text: "fjdasklfjdksjkl\nfjkdlasjfkldsajfkdj\nfjdasjfkldsajfldksaj\nfjdskalfjdklsajfdkl"
+                    font_size: "20sp"
+        
+        GridLayout:
+            cols: 1
+            size_hint: .25, None
+            pos_hint: {'top': .9}            
+            spacing: 10
+            
+            Button:
+                text: "Return"
+                font_size: "20sp"
+                size_hint: None, None
+                size: 150, 40
+                on_press: root.manager.current = 'command'
+                
+<chatting>:
+    BoxLayout:
+        size: root.size
+        padding: 15
+        spacing: 10
+
+        GridLayout:
+            cols:1
             spacing: 20
+
             ScrollView:
                 TextInput:
 
@@ -160,17 +157,54 @@
                     text:'Send'
                     font_size: "20sp"
             
-        BoxLayout:
-            size_hint_x: .25
-            
+        GridLayout:
+            cols: 1
+            size_hint: None, None
+            width: 150
+            pos_hint: {'top': 0.9}
+            spacing: 10
+
             Button:
-                text: "return"
+                text: "Return"
                 font_size: "20sp"
-                size_hint: None, None
-                pos_hint: {"top": .9 }
-                height: 60
-                width: 100
-                on_press: root.manager.current = 'login'
+                on_press: root.manager.current = 'command'
+
+            Button:
+                text: "History"
+                font_size: '20sp'
+<chat_with>:
+    BoxLayout:
+        orientation: 'vertical'
+        size: root.width, 80
+        center_y: root.height / 2
         
+        BoxLayout:
+            orientation: 'horizontal'
+
+            Label:
+                text: 'Chat with'
+                font_size: "40sp"
+            Button:
+                text: 'select'
+        Button:
+            size_hint: None, None
+            size: 100, 60
+            text: 'Join'
+            font_size: '20sp'
+            on_press: root.manager.current = 'chatting'
+
+                
+<peermsg>:
+    Label:
+        halign: "left"
+        font_size: '15sp'
+        # text:
+
+<selfmsg>:
+    Label:
+        halign: "right"
+        font_size: '15sp'
+        # text:
+
 
  
