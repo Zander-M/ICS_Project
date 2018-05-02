@@ -1,0 +1,51 @@
+#:kivy 1.10.0
+
+<mainCanvas>:
+
+    Label:
+        size_hint_y: None
+        font_size: 40 
+        center_x: root.width / 2
+        top: root.top - 80 
+        text: "Welcome to ICS Chat System!"
+
+    BoxLayout:
+        orientation: "vertical"
+        size_hint: None, None
+        width: 500
+        spacing:10
+        center_x: root.width / 2
+        center_y: root.height / 2
+        canvas:
+            Color:
+                rgb: .3, .3, .3
+            
+            Rectangle:
+                size: self.width + 20, self.height + 40
+                pos: self.x - 10, self.y - 20
+
+        GridLayout:
+            cols: 2
+            size_hint_y: None
+            height: 40
+
+
+            Label:
+                text:"Username: "
+                size_hint_x: .25
+                font_size: "20sp"
+
+            TextInput:
+                size_hint_x: .75
+                font_size: '20sp'
+                center_x: root.width / 2
+
+        Button:
+            text: "Start Chatting"
+            font_size: "20sp"
+            size_hint: None, None
+            width: 200
+            height: 50
+            pos_hint:{"center_x": 0.5}
+                
+            

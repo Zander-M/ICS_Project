@@ -53,11 +53,11 @@ class Index:
      (9, ' Thy self thy foe, to thy sweet self too cruel:'),
      (9, ' Thy self thy foe, to thy sweet self too cruel:'),
      (12, ' Within thine own bud buriest thy content,')]
-
+              
     '''
     def search(self, term):
         msgs = []
-        for i in self.index:
+        for i in self.index.keys():
             if re.match(r'^{}[\W]?$'.format(term), i, re.I):
                 for j in self.index[i]:
                     msgs.append((j, self.msgs[j]))

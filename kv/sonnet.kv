@@ -1,0 +1,40 @@
+#:kivy 1.10.0
+
+<mainCanvas>:
+    BoxLayout:
+        orientation: "horizontal"
+        size: root.size
+
+        AnchorLayout:
+            size: root.size
+            
+            # canvas: 
+            #     Color:
+            #         rgb: 1, 0, 0
+            #     Rectangle:
+            #         size: self.size
+            Label:
+                text: "Sonnet"
+                font_size: "40sp"
+                anchor_x: 'center'
+                anchor_y: 'top'
+                
+        
+            Label:
+                anchor_x: 'center'
+                anchor_y: 'center'
+                text: "fjdasklfjdksjkl\nfjkdlasjfkldsajfkdj\nfjdasjfkldsajfldksaj\nfjdskalfjdklsajfdkl"
+                font_size: "20sp"
+        
+        BoxLayout:
+            size_hint_x: .25
+            
+            Button:
+                text: "return"
+                font_size: "20sp"
+                size_hint: None, None
+                pos_hint: {"top": .9, "center_x": .6 }
+                height: 60
+                width: 100
+                padding: 
+            

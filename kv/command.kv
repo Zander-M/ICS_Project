@@ -1,0 +1,41 @@
+#:kivy 1.10.0
+
+<mainCanvas>:
+
+    BoxLayout:
+        orientation: "horizontal"
+        size: root.size
+        BoxLayout:
+            
+            Label:                            
+                text:'''Hello, Zander\nWhat do you want to do?'''
+                font_size: '40sp'
+                halign: 'left'
+            
+
+        GridLayout:
+            size_hint: .4, .8
+            pos_hint: {'right': 1}
+            cols: 1
+            width: 300
+            height: 40
+            pos_hint: {"center_y": .5}
+            spacing: 10
+            padding: 20
+
+            Button:
+                text: "Chat"
+                font_size: "20sp"
+            
+            Button:
+                text: "History"
+                font_size: "20sp" 
+            Button:
+                text: "?"
+                font_size: "20sp" 
+            Button:
+                text: "Sonnets"
+                font_size: "20sp" 
+            Button:
+                text: "Quit"
+                font_size: "20sp"
