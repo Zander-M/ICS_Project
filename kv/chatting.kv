@@ -1,0 +1,41 @@
+#:kivy 1.10.0
+
+<mainCanvas>:
+    BoxLayout:
+        size: root.size
+        padding: 20
+        spacing: 20
+
+        GridLayout:
+            cols:1
+            spacing: 20
+            ScrollView:
+                TextInput:
+
+            GridLayout:
+                size_hint_y: None
+                height: 40
+                cols: 2
+
+                TextInput:
+                    font_size: "20sp"
+
+                Button:
+                    size_hint_x: None
+                    width: 100
+                    text:'Send'
+                    font_size: "20sp"
+            
+        BoxLayout:
+            size_hint_x: .25
+            
+            Button:
+                text: "return"
+                font_size: "20sp"
+                size_hint: None, None
+                pos_hint: {"top": .9, "center_x": .6 }
+                height: 60
+                width: 100
+        
+
+            

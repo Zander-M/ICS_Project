@@ -10,9 +10,10 @@ from kivy.uix.widget import Widget
 from kivy.uix.scrollview import ScrollView
 from kivy.lang import Builder
 
-# Builder.load_file("kv\\login.kv") # test login
+Builder.load_file("kv\\login.kv") # test login
 # Builder.load_file("kv\\command.kv") # test command
-Builder.load_file("kv\\sonnet.kv") # test sonnet
+# Builder.load_file("kv\\sonnet.kv") # test sonnet
+# Builder.load_file("kv\\chatting.kv")
 class loginIcon(Widget):
     pass
 
