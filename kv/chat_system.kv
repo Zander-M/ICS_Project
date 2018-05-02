@@ -172,20 +172,24 @@
             Button:
                 text: "History"
                 font_size: '20sp'
+
 <chat_with>:
     BoxLayout:
         orientation: 'vertical'
-        size: root.width, 80
         center_y: root.height / 2
+        center_x: root.width / 2
+        size_hint: None, None
+        width: 500
         
-        BoxLayout:
-            orientation: 'horizontal'
+        GridLayout:
+            cols: 2
 
             Label:
                 text: 'Chat with'
                 font_size: "40sp"
             Button:
                 text: 'select'
+                on_press: root
         Button:
             size_hint: None, None
             size: 100, 60
