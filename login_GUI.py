@@ -11,15 +11,15 @@ from kivy.uix.scrollview import ScrollView
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.uix.dropdown import DropDown
-Builder.load_file("kv\\chat_system.kv") # test login
+
+
+# test login
 # Builder.load_file("kv\\command.kv") # test command
 # Builder.load_file("kv\\sonnet.kv") # test sonnet
 # Builder.load_file("kv\\chatting.kv")
-class loginIcon(Widget):
-    pass
-
 class login(Screen):
-    # log in stage panel
+    def send(self):
+        
     pass
 
 class command(Screen):
@@ -37,12 +37,7 @@ class sonnet(Screen):
     # sonnet stage panel
     pass
     
-sm = ScreenManager()
-sm.add_widget(login(name='login'))
-sm.add_widget(command(name='command'))
-sm.add_widget(chat_with(name='chat_with'))
-sm.add_widget(chatting(name='chatting'))
-sm.add_widget(sonnet(name='sonnet'))
+
 
 class mainCanvas(Widget):
     # this is the main canvas handling tasks
@@ -54,6 +49,13 @@ class mainCanvas(Widget):
 class ChatSystem(App):
 
     def build(self):
+        Builder.load_file("kv\\chat_system.kv") # load layout files 
+        sm = ScreenManager()
+        sm.add_widget(login(name='login'))
+        sm.add_widget(command(name='command'))
+        sm.add_widget(chat_with(name='chat_with'))
+        sm.add_widget(chatting(name='chatting'))
+        sm.add_widget(sonnet(name='sonnet'))
         return sm
     
     def popup(self):
@@ -70,6 +72,8 @@ class ChatSystem(App):
             pass
 
 
-
 if __name__ == '__main__':
+    # threading.start_new_thread(chat_client())
+    # threading.start_new_thread(GUI())
+    pass
     ChatSystem().run()

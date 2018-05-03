@@ -38,6 +38,7 @@
                 font_size: '20sp'
                 center_x: root.width / 2
                 multiline: False
+                id: usrn
         Button:
             id: 'login'
             text: "Log in"
@@ -46,7 +47,7 @@
             width: 200
             height: 50
             pos_hint:{"center_x": 0.5}
-            on_press: root.manager.current = 'command'
+            on_press: 
 
 <command>:
 
@@ -209,6 +210,13 @@
         halign: "right"
         font_size: '15sp'
         # text:
+
+<notice>:
+    GridLayout:
+        cols: 1
+        Label:
+        Button:
+            text: 'OK'
 
 
  

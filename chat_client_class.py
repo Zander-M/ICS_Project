@@ -5,24 +5,25 @@ import sys
 import json
 from chat_utils import *
 import client_state_machine as csm # import client_state_machine_student as csm
-
 import threading
 
 class Client:
-    def __init__(self, args):
-        self.peer = ''
+    def __init__(self, **args):
         self.console_input = []
+        self.peer = ''
         self.state = S_OFFLINE
         self.system_msg = ''
         self.local_msg = ''
         self.peer_msg = ''
+        self.usrn = ''
+        
 
     def quit(self):
         self.socket.shutdown(socket.SHUT_RDWR)
         self.socket.close()
 
     def get_name(self):
-        return self.name
+        return self.usrn
 
     def init_chat(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM )
@@ -61,14 +62,14 @@ class Client:
     def login(self):
         my_msg, peer_msg = self.get_msgs()
         if len(my_msg) > 0:
-            self.name = my_msg
-            msg = json.dumps({"action":"login", "name":self.name})
+            self.usrn = my_msg
+            msg = json.dumps({"action":"login", "name":self.usrn})
             self.send(msg)
             response = json.loads(self.recv())
             if response["status"] == 'ok':
                 self.state = S_LOGGEDIN
                 self.sm.set_state(S_LOGGEDIN)
-                self.sm.set_myname(self.name)
+                self.sm.set_myname(self.usrn)
                 self.print_instructions()
                 return (True)
             elif response["status"] == 'duplicate':
