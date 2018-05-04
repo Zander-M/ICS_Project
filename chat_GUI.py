@@ -4,27 +4,36 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.widget import Widget
 # from kivy.uix.scrollview import ScrollView
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen, ScreenManager
 import threading
+from chat_system import commute
+import trans
 # from kivy.uix.dropdown import DropDown
-
 
 # test login
 # Builder.load_file("kv\\command.kv") # test command
 # Builder.load_file("kv\\sonnet.kv") # test sonnet
 # Builder.load_file("kv\\chatting.kv")
 class login(Screen):
+   
     def usrlgin(self):
         app = App.get_running_app()
-        app.cmd(self.ids['usrn'].text, 'command')
+        app.usrn = self.ids['usrn'].text
+        app.cmd('zd', 'command')
+
+class notice(Popup):
+    pass
 
 class command(Screen):
-    # logged in stage panel
-    pass
+    # logged in stage pane
+    def bye(self):
+           trans.trans.append('q')
+           App.get_running_app().stop()
 
 class chat_with(Screen):
     pass
@@ -50,7 +59,8 @@ class Chat_GUI(App):
 
     def __init__(self):
         super().__init__()
-        self.msg = ''
+        self.usrn = ''
+        self.lk = threading.Lock()
 
     def build(self):
         Builder.load_file("kv\\chat_system.kv") # load layout files 
@@ -62,8 +72,20 @@ class Chat_GUI(App):
         self.scrm.add_widget(sonnet(name='sonnet'))
         return self.scrm
     
-    def cmd(self, text):
-        self.msg = text
+    def cmd(self, text, scn):
+        trans.trans.append(text)
+        while trans.system_msg == '':
+            pass
+        if trans.local_msg[-1][0]=='D':
+            self.popup(self.scrm.current)
+        else:
+            self.scrm.current = 'command'
+        
+    def popup(self, scn):
+        p = notice()
+        p.open()
+    
+   
        # chatThread.start()    
     # def update(self, screen):
     #     if screen == 0:

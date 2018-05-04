@@ -3,13 +3,16 @@
 from chat_GUI import *
 import threading
 from chat_client_class import *
+import trans
 
-trans = ''
+
+def commute(text):
+    global trans
+    trans = text
 
 class ChatSystem:
     
     def __init__(self):
-        self.trans = ''
         self.c_sys = Client()
         self.g_sys = Chat_GUI()
         self.trdlock = threading.Lock()
@@ -36,35 +39,32 @@ class ChatSystem:
 
     def run_app(self):
         self.g_sys.run()
-        while self.g_sys.msg:
-            self.trdlock.acquire()
-            self.trans = self.g_sys.msg
-            self.g_sys.msg = ''
-            self.trdlock.release()
 
     def run_C_sys(self):
-
         self.c_sys.run_chat()
-        while self.trans:
-            self.trdlock.acquire()
-            print(self.trans)
-            self.trans = ''
             # self.c_sys.console_input.append(self.trans)
             # self.trans = ''
         # while self.trans != '':
         #     self.c_sys.console_input.append(self.trans)
         #     self.trans = ''
 
+    def tst(self):
+        while len(trans.trans) != 0:
+            self.c_sys.console_input.append(trans.trans)
+            trans.trans = [] 
+
     def trdctrl(self): # starting two threads, chat system and GUI
         # self.c_sys.run_chat()
-        # self.g_sys.run()
+        # self.g_sys.run(
         chatThread = threading.Thread(target=self.run_C_sys)
         appThread = threading.Thread(target=self.run_app)
+        testThread = threading.Thread(target=commute, args=['test'])
         appThread.start()
         chatThread.start()
+        testThread.start()
+        testThread.join()
         appThread.join()
-        while appThread.is_alive():
-            chatThread.join()
+        chatThread.join()
  
 if __name__ == '__main__':
     chat = ChatSystem()

@@ -7,7 +7,7 @@ def main():
     parser.add_argument('-d', type=str, default=None, help='server IP addr')
     args = parser.parse_args()
 
-    client = Client(args)
+    client = Client()
     client.run_chat()
 
 main()

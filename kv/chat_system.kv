@@ -1,4 +1,7 @@
 #:kivy 1.10.0
+#:import system_msg trans.system_msg
+#:import trans trans.trans
+#:import local_msg trans.local_msg
 
 <login>:
 
@@ -47,7 +50,7 @@
             width: 200
             height: 50
             pos_hint:{"center_x": 0.5}
-            on_release: app.cmd('zd')
+            on_press: root.usrlgin()
 
 <command>:
 
@@ -93,7 +96,7 @@
             Button:
                 text: "Quit"
                 font_size: "20sp"        
-                on_press: root.manager.current = 'login'   
+                on_press: app.bye() 
                 
 <sonnet>:
     BoxLayout:
@@ -212,11 +215,16 @@
         # text:
 
 <notice>:
+    size_hint: .5, .5
+    auto_dismiss: False
+    title: "Notice"
     GridLayout:
         cols: 1
         Label:
+            text: local_msg[-1]
         Button:
             text: 'OK'
+            on_press: root.dismiss()
 
 
  

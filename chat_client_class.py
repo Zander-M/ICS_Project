@@ -6,10 +6,11 @@ import json
 from chat_utils import *
 import client_state_machine as csm # import client_state_machine_student as csm
 import threading
+import trans
 
 class Client:
     def __init__(self, **args):
-        self.console_input = []
+        # self.console_input = []
         self.peer = ''
         self.state = S_OFFLINE
         self.system_msg = ''
@@ -48,17 +49,17 @@ class Client:
         my_msg = ''
         peer_msg = []
         #peer_code = M_UNDEF    for json data, peer_code is redundant
-        if len(self.console_input) > 0:
-            my_msg = self.console_input.pop(0)
+        if len(trans.trans) > 0:
+            my_msg = trans.trans.pop(0)
         if self.socket in read:
             peer_msg = self.recv()
         return my_msg, peer_msg
 
     def output(self):
-        if len(self.system_msg) > 0:
-            self.local_msg += self.system_msg # keep track of what's going on
-            print(self.system_msg)
-            self.system_msg = ''
+        if len(trans.system_msg) > 0:
+            trans.local_msg.append(trans.system_msg) # keep track of what's going on
+            print(trans.system_msg)
+            trans.system_msg = ''
 
     def login(self):
         my_msg, peer_msg = self.get_msgs()
@@ -74,7 +75,7 @@ class Client:
                 self.print_instructions()
                 return (True)
             elif response["status"] == 'duplicate':
-                self.system_msg += 'Duplicate username, try again'
+                trans.system_msg += 'Duplicate username, try again'
                 return False
         else:               # fix: dup is only one of the reasons
            return(False)
@@ -83,19 +84,19 @@ class Client:
     def read_input(self):
         while True:
             text = sys.stdin.readline()[:-1]
-            self.console_input.append(text) # no need for lock, append is thread safe
+            trans.trans.append(text) # no need for lock, append is thread safe
 
     def print_instructions(self):
-        self.system_msg += menu
+        trans.system_msg += menu
 
     def run_chat(self):
         self.init_chat()
-        self.system_msg += 'Welcome to ICS chat\n'
-        self.system_msg += 'Please enter your name: '
+        trans.system_msg += 'Welcome to ICS chat\n'
+        trans.system_msg += 'Please enter your name: '
         self.output()
         while self.login() != True:
             self.output()
-        self.system_msg += 'Welcome, ' + self.get_name() + '!'
+        trans.system_msg += 'Welcome, ' + self.get_name() + '!'
         self.output()
         while self.sm.get_state() != S_OFFLINE:
             self.proc()
@@ -108,4 +109,4 @@ class Client:
 #==============================================================================
     def proc(self):
         my_msg, peer_msg = self.get_msgs()
-        self.system_msg += self.sm.proc(my_msg, peer_msg)
+        trans.system_msg += self.sm.proc(my_msg, peer_msg)
