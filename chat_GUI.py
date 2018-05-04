@@ -1,5 +1,4 @@
 import kivy
-
 from kivy.app import App
 from kivy.uix.textinput import TextInput
 from kivy.uix.label import Label
@@ -7,10 +6,11 @@ from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.widget import Widget
-from kivy.uix.scrollview import ScrollView
+# from kivy.uix.scrollview import ScrollView
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen, ScreenManager
-from kivy.uix.dropdown import DropDown
+import threading
+# from kivy.uix.dropdown import DropDown
 
 
 # test login
@@ -18,9 +18,9 @@ from kivy.uix.dropdown import DropDown
 # Builder.load_file("kv\\sonnet.kv") # test sonnet
 # Builder.load_file("kv\\chatting.kv")
 class login(Screen):
-    def send(self):
-        
-    pass
+    def usrlgin(self):
+        app = App.get_running_app()
+        app.cmd(self.ids['usrn'].text, 'command')
 
 class command(Screen):
     # logged in stage panel
@@ -45,35 +45,39 @@ class mainCanvas(Widget):
     # return commandPanel() # test command panel
     # test login panel
     # return chattingPanel() # test chatting panel
+       
+class Chat_GUI(App):
 
-class ChatSystem(App):
+    def __init__(self):
+        super().__init__()
+        self.msg = ''
 
     def build(self):
         Builder.load_file("kv\\chat_system.kv") # load layout files 
-        sm = ScreenManager()
-        sm.add_widget(login(name='login'))
-        sm.add_widget(command(name='command'))
-        sm.add_widget(chat_with(name='chat_with'))
-        sm.add_widget(chatting(name='chatting'))
-        sm.add_widget(sonnet(name='sonnet'))
-        return sm
+        self.scrm = ScreenManager()
+        self.scrm.add_widget(login(name='login'))
+        self.scrm.add_widget(command(name='command'))
+        self.scrm.add_widget(chat_with(name='chat_with'))
+        self.scrm.add_widget(chatting(name='chatting'))
+        self.scrm.add_widget(sonnet(name='sonnet'))
+        return self.scrm
     
-    def popup(self):
-        pass
-    
-    def update(self, screen):
-        if screen == 0:
-            sm.current('')        
-        elif screen == 1:
-            sm.current('')
-        elif screen == 2:
-            sm.current('')
-        else:
-            pass
+    def cmd(self, text):
+        self.msg = text
+       # chatThread.start()    
+    # def update(self, screen):
+    #     if screen == 0:
+    #         sm.current('')        
+    #     elif screen == 1:
+    #         sm.current('')
+    #     elif screen == 2:
+    #         sm.current('')
+    #     else:
+    #         pass
 
+def main():
+    a = Chat_GUI()
+    a.run()
 
 if __name__ == '__main__':
-    # threading.start_new_thread(chat_client())
-    # threading.start_new_thread(GUI())
-    pass
-    ChatSystem().run()
+    main()

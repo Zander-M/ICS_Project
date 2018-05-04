@@ -15,7 +15,7 @@ class Client:
         self.system_msg = ''
         self.local_msg = ''
         self.peer_msg = ''
-        self.usrn = ''
+        self.usrn = '' # self.name is used in the Kivy library, therefore changed to usrn.
         
 
     def quit(self):
@@ -30,9 +30,9 @@ class Client:
         svr = SERVER # if self.args.d == None else (self.rgs.d, CHAT_PORT)
         self.socket.connect(svr)
         self.sm = csm.ClientSM(self.socket)
-        reading_thread = threading.Thread(target=self.read_input)
-        reading_thread.daemon = True
-        reading_thread.start()
+        # reading_thread = threading.Thread(target=self.read_input)
+        # reading_thread.daemon = True
+        # reading_thread.start()
 
     def shutdown_chat(self):
         return
@@ -56,6 +56,7 @@ class Client:
 
     def output(self):
         if len(self.system_msg) > 0:
+            self.local_msg += self.system_msg # keep track of what's going on
             print(self.system_msg)
             self.system_msg = ''
 
