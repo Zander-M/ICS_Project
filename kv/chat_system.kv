@@ -4,7 +4,6 @@
 #:import local_msg trans.local_msg
 
 <login>:
-
     Label:
         font_size: 40 
         pos: (0, 150)
@@ -42,8 +41,10 @@
                 center_x: root.width / 2
                 multiline: False
                 id: usrn
+                on_text_validate: root.usrlgin
+
         Button:
-            id: 'login'
+            id: login
             text: "Log in"
             font_size: "20sp"
             size_hint: None, None
@@ -60,7 +61,8 @@
         BoxLayout:
             
             Label:                            
-                text:'''Hello, Zander\nWhat do you want to do?'''
+                id: cmd_usrn
+                # text:"Hello, " +  + "\nWhat do you want to do?"
                 font_size: '40sp'
                 halign: 'left'
             
@@ -96,7 +98,7 @@
             Button:
                 text: "Quit"
                 font_size: "20sp"        
-                on_press: app.bye() 
+                on_press: root.bye() 
                 
 <sonnet>:
     BoxLayout:
@@ -221,7 +223,7 @@
     GridLayout:
         cols: 1
         Label:
-            text: local_msg[-1]
+            text: app.notice
         Button:
             text: 'OK'
             on_press: root.dismiss()

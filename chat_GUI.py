@@ -7,31 +7,56 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.widget import Widget
-# from kivy.uix.scrollview import ScrollView
+from kivy.uix.scrollview import ScrollView
+from kivy.clock import Clock
 from kivy.lang import Builder
+from kivy.properties import ObjectProperty
 from kivy.uix.screenmanager import Screen, ScreenManager
 import threading
-from chat_system import commute
 import trans
-# from kivy.uix.dropdown import DropDown
 
+# from kivy.uix.dropdown import DropDown
 # test login
 # Builder.load_file("kv\\command.kv") # test command
 # Builder.load_file("kv\\sonnet.kv") # test sonnet
 # Builder.load_file("kv\\chatting.kv")
+
 class login(Screen):
    
-    def usrlgin(self):
+    def __init__(self, **kwargs):
+        super(Screen, self).__init__(**kwargs)
+        self.ids['usrn'].bind(on_text_validate=self.usrlgin)
+
+    def usrlgin(self, *args):
         app = App.get_running_app()
         app.usrn = self.ids['usrn'].text
-        app.cmd('zd', 'command')
+        app.cmd(app.usrn)
+        while trans.system_msg == '':
+            pass
+        if trans.system_msg[0] == 'D':
+            app.notice = 'oops, duplicated name'
+            app.popup()
+        else:
+            app.scrm.current = 'command'
+            app.notice = 'Welcome! ' + app.usrn +'!'
+            app.scrm.current = 'command'
+            app.popup()
 
 class notice(Popup):
     pass
 
 class command(Screen):
-    # logged in stage pane
+    
+    def __init__(self, **kwargs):
+        super(Screen, self).__init__(**kwargs)
+    # logged in stage panel.
+    
+    def on_enter(self, *args):
+        app = App.get_running_app()
+        self.ids['cmd_usrn'].text = "Hello, " + app.usrn + '\nWhat do you want to do?'
+
     def bye(self):
+        # log out of the system
            trans.trans.append('q')
            App.get_running_app().stop()
 
@@ -51,42 +76,34 @@ class sonnet(Screen):
 class mainCanvas(Widget):
     # this is the main canvas handling tasks
     pass
-    # return commandPanel() # test command panel
-    # test login panel
-    # return chattingPanel() # test chatting panel
-       
+    # return commandPanel() 
+
 class Chat_GUI(App):
 
     def __init__(self):
         super().__init__()
         self.usrn = ''
-        self.lk = threading.Lock()
+        self.notice = ''
 
     def build(self):
         Builder.load_file("kv\\chat_system.kv") # load layout files 
         self.scrm = ScreenManager()
         self.scrm.add_widget(login(name='login'))
-        self.scrm.add_widget(command(name='command'))
+        self.scrm.add_widget(command(name='command', id='command'))
         self.scrm.add_widget(chat_with(name='chat_with'))
         self.scrm.add_widget(chatting(name='chatting'))
         self.scrm.add_widget(sonnet(name='sonnet'))
         return self.scrm
     
-    def cmd(self, text, scn):
+    def cmd(self, text):
         trans.trans.append(text)
-        while trans.system_msg == '':
-            pass
-        if trans.local_msg[-1][0]=='D':
-            self.popup(self.scrm.current)
-        else:
-            self.scrm.current = 'command'
         
-    def popup(self, scn):
+    def popup(self, *arg):
         p = notice()
         p.open()
+        self.notice = ''
     
-   
-       # chatThread.start()    
+    # chatThread.start()    
     # def update(self, screen):
     #     if screen == 0:
     #         sm.current('')        
