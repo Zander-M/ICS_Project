@@ -34,13 +34,10 @@ class login(Screen):
         while trans.system_msg == '':
             pass
         if trans.system_msg[0] == 'D':
-            app.notice = 'oops, duplicated name'
-            app.popup()
+            app.popup('Oops, duplicated name. Try another?')
         else:
             app.scrm.current = 'command'
-            app.notice = 'Welcome! ' + app.usrn +'!'
-            app.scrm.current = 'command'
-            app.popup()
+            app.popup('Welcome! ' + app.usrn + '!')
 
 class notice(Popup):
     pass
@@ -53,12 +50,13 @@ class command(Screen):
     
     def on_enter(self, *args):
         app = App.get_running_app()
-        self.ids['cmd_usrn'].text = "Hello, " + app.usrn + '\nWhat do you want to do?'
+        self.ids['cmd_usrn'].text = "Hello, " + app.usrn + '\nWhat do you want to do?' # change the username on the command panel
 
     def bye(self):
         # log out of the system
-           trans.trans.append('q')
-           App.get_running_app().stop()
+        app = App.get_running_app()
+        trans.trans.append('q')
+        app.stop()
 
 class chat_with(Screen):
     pass
@@ -82,8 +80,8 @@ class Chat_GUI(App):
 
     def __init__(self):
         super().__init__()
-        self.usrn = ''
-        self.notice = ''
+        self.usrn = '' # variable that stores the username
+        self.notice = '' # content of the popup window
 
     def build(self):
         Builder.load_file("kv\\chat_system.kv") # load layout files 
@@ -98,8 +96,9 @@ class Chat_GUI(App):
     def cmd(self, text):
         trans.trans.append(text)
         
-    def popup(self, *arg):
+    def popup(self, msg):
         p = notice()
+        p.ids['msg'].text = msg
         p.open()
         self.notice = ''
     
