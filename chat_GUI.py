@@ -64,18 +64,22 @@ class command(Screen):
 
 class chat_with(Screen):
     
-    def udusrls(self):
+    def show_usrls(self):
         app = App.get_running_app()
         app.getusrls()
+        self.ids['usrls'].clear_widgets()
+        if len(app.usrls) > 1 : # update the dropdown list 
+            for i in app.usrls.keys():
+                if i != app.usrn:
+                    btn = Button(text=i, size_hint_y=None, height=60)
+                    btn.bind(on_release=lambda btn: self.ids['usrls'].select(btn.text))
+                    self.ids['usrls'].add_widget(btn)
+            self.ids['usrls'].open(self.ids['slt_usr'])
         # if len(app.usrls) != 0: 
         #     for i in app.usrls:
         #         self.ids['usr_ls'].add_widget(Button(text=i, on_release=parent.select(i)))
-        # else:
-        #     app.popup('Oops, no available user!')
-    
-    def show_usrls(self):
-        self.udusrls()
-        self.ids['usr_ls'].open(self.ids['usr_ls'])
+        else:
+            app.popup('Oops, no available user!')
         
 
 class chatting(Screen):
@@ -123,7 +127,7 @@ class Chat_GUI(App):
             pass
         import ast
         self.usrls = ast.literal_eval(trans.system_msg)
-        print(tyep(self.usrls))
+        return
         
         
     def popup(self, msg):

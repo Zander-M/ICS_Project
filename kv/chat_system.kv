@@ -181,30 +181,26 @@
 
 <chat_with>:
     GridLayout:
-        cols:1
-        center_y: root.center_y
-        center_x: root.center_x
+        cols: 1
         
         GridLayout:
             cols: 2
-
-            Widget:
-                on_parent: usr_ls.dismiss()
+            padding: 10
 
             Label:
-                text: 'Chat with'
+                text: "Chat with "
                 font_size: "40sp"
 
             Button:
                 id: slt_usr
                 text: 'who?'
-                font_size: "20sp"
+                size_hint: None, None
+                size: 100, 60
                 on_release: root.show_usrls()
 
-            DropDown:
-                id: usr_ls
-                on_select: slt_usr.text = '{}'.format(args[1])
-            
+        DropDown:
+            id: usrls
+            on_select: lambda instance, x: setattr(slt_usr, 'text', x )
 
 
         Button:

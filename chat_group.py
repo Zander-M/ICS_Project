@@ -91,7 +91,8 @@ class Group:
         # full_list += "Groups: -----------" + "\n"
         # full_list += str(self.chat_grps) + "\n"
         # return full_list # changed
-        return str(self.chat_grps)
+        # return str(self.chat_grps) # changed
+        return str(self.members)
 
     def list_all2(self, me):
         print("Users: ------------")
