@@ -29,15 +29,19 @@ class login(Screen):
 
     def usrlgin(self, *args):
         app = App.get_running_app()
-        app.usrn = self.ids['usrn'].text
-        app.cmd(app.usrn)
-        while trans.system_msg == '':
-            pass
-        if trans.system_msg[0] == 'D':
-            app.popup('Oops, duplicated name. Try another?')
+        if self.ids['usrn'].text.strip() == '':
+            app.popup('Username cannot be empty!')
+
         else:
-            app.scrm.current = 'command'
-            app.popup('Welcome! ' + app.usrn + '!')
+            app.usrn = self.ids['usrn'].text.strip()
+            app.cmd(app.usrn)
+            while trans.system_msg == '':
+                pass
+            if trans.system_msg[0] == 'D':
+                app.popup('Oops, duplicated name. Try another?')
+            else:
+                app.scrm.current = 'command'
+                app.popup('Welcome! ' + app.usrn + '!')
 
 class notice(Popup):
     pass
@@ -59,7 +63,20 @@ class command(Screen):
         app.stop()
 
 class chat_with(Screen):
-    pass
+    
+    def udusrls(self):
+        app = App.get_running_app()
+        app.getusrls()
+        # if len(app.usrls) != 0: 
+        #     for i in app.usrls:
+        #         self.ids['usr_ls'].add_widget(Button(text=i, on_release=parent.select(i)))
+        # else:
+        #     app.popup('Oops, no available user!')
+    
+    def show_usrls(self):
+        self.udusrls()
+        self.ids['usr_ls'].open(self.ids['usr_ls'])
+        
 
 class chatting(Screen):
     # chatting stage panel
@@ -82,6 +99,7 @@ class Chat_GUI(App):
         super().__init__()
         self.usrn = '' # variable that stores the username
         self.notice = '' # content of the popup window
+        self.usrls = [] # current usr in dict
 
     def build(self):
         Builder.load_file("kv\\chat_system.kv") # load layout files 
@@ -95,6 +113,18 @@ class Chat_GUI(App):
     
     def cmd(self, text):
         trans.trans.append(text)
+    
+    def rtcmd(self):
+        self.scrm.current = 'command'
+    
+    def getusrls(self):
+        trans.trans.append('who')
+        while trans.system_msg == '':
+            pass
+        import ast
+        self.usrls = ast.literal_eval(trans.system_msg)
+        print(tyep(self.usrls))
+        
         
     def popup(self, msg):
         # popup window. pass in message to pop up. click ok to close.

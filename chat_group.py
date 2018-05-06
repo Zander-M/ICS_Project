@@ -85,12 +85,13 @@ class Group:
         return
 
     def list_all(self, me):
-        # a simple minded implementation
-        full_list = "Users: ------------" + "\n"
-        full_list += str(self.members) + "\n"
-        full_list += "Groups: -----------" + "\n"
-        full_list += str(self.chat_grps) + "\n"
-        return full_list
+        # # a simple minded implementation
+        # full_list = "Users: ------------" + "\n"
+        # full_list += str(self.members) + "\n"
+        # full_list += "Groups: -----------" + "\n"
+        # full_list += str(self.chat_grps) + "\n"
+        # return full_list # changed
+        return str(self.chat_grps)
 
     def list_all2(self, me):
         print("Users: ------------")

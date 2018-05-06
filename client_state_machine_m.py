@@ -5,6 +5,15 @@ Created on Sun Apr  5 00:00:32 2015
 """
 from chat_utils import *
 import json
+import base64
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+import numpy as np
+import random
+from PIL import Image
+plt.ion()
+
+ENCODING= 'utf-8'
 
 class ClientSM:
     def __init__(self, s):
@@ -71,7 +80,7 @@ class ClientSM:
                 elif my_msg == 'who':
                     mysend(self.s, json.dumps({"action":"list"}))
                     logged_in = json.loads(myrecv(self.s))["results"]
-                    # self.out_msg += 'Here are all the users in the system:\n'
+                    # self.out_msg += 'Here are all the users in the system:\n' # changed.
                     self.out_msg += logged_in
 
                 elif my_msg[0] == 'c':
@@ -121,17 +130,48 @@ class ClientSM:
 #==============================================================================
         elif self.state == S_CHATTING:
             if len(my_msg) > 0:     # my stuff going out
-                mysend(self.s, json.dumps({"action":"exchange", "from":"[" + self.me + "]", "message":my_msg}))
-                if my_msg == 'bye':
+                if my_msg[0] == "b" and my_msg[1] == "'":
+                    raw_IMAGE_NAME = my_msg[2:len(my_msg)-1]
+                    IMAGE_NAME = raw_IMAGE_NAME.replace(' ','\ ')
+                    with open(IMAGE_NAME, 'rb') as jpg_file:
+                        byte_content = jpg_file.read()
+                    base64_bytes = base64.b64encode(byte_content)
+                    base64_string = base64_bytes.decode(ENCODING)
+                    text = base64_string.replace("/", "&")
+
+                    jpg_file.close()
+                    
+                    mysend(self.s, json.dumps({"action":"image", \
+                        "from":"["+self.me+"]","message":text}))
+                
+                elif my_msg == 'bye':
                     self.disconnect()
                     self.state = S_LOGGEDIN
                     self.peer = ''
+                else:
+                    mysend(self.s, json.dumps({"action":"exchange", "from":"[" + self.me + "]", "message":my_msg}))
+                    
             if len(peer_msg) > 0:    # peer's stuff, coming in
-                peer_msg = json.loads(peer_msg)
+                peer_msg = json.loads(peer_msg) # changed
                 if peer_msg["action"] == "connect":
                     self.out_msg += "(" + peer_msg["from"] + " joined)\n"
                 elif peer_msg["action"] == "disconnect":
                     self.state = S_LOGGEDIN
+                    
+                elif peer_msg["action"] == "image":
+                    image_base64_string = peer_msg["message"]
+                    text = image_base64_string.replace('&', '/')
+                    image_data = base64.b64decode(text)
+                    mysend(self.s, json.dumps({"action":"time"}))
+                    time_in = json.loads(myrecv(self.s))["results"]
+                    IMAGE_NAME = peer_msg["from"] + time_in + '.jpg'
+                    with open(IMAGE_NAME, 'wb') as jpg_file:
+                        jpg_file.write(image_data)
+                    jpg_file.close()
+                    img = Image.open(IMAGE_NAME)
+                    img.show()
+                    self.out_msg += 'Received one image from' + peer_msg["from"]
+                
                 else:
                     self.out_msg += peer_msg["from"] + peer_msg["message"]
 

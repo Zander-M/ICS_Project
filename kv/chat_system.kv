@@ -54,7 +54,7 @@
             on_press: root.usrlgin()
 
 <command>:
-    on_enter: self.ids['cmd_usrn'].text = 'Hello, ' + app.usrn + '\nWhat do you want to do?'
+    on_pre_enter: self.ids['cmd_usrn'].text = 'Hello, ' + app.usrn + '\nWhat do you want to do?'
     BoxLayout:
         orientation: "horizontal"
         size: root.size
@@ -180,22 +180,33 @@
                 font_size: '20sp'
 
 <chat_with>:
-    BoxLayout:
-        orientation: 'vertical'
-        center_y: root.height / 2
-        center_x: root.width / 2
-        size_hint: None, None
-        width: 500
+    GridLayout:
+        cols:1
+        center_y: root.center_y
+        center_x: root.center_x
         
         GridLayout:
             cols: 2
 
+            Widget:
+                on_parent: usr_ls.dismiss()
+
             Label:
                 text: 'Chat with'
                 font_size: "40sp"
+
             Button:
-                text: 'select'
-                on_press: root
+                id: slt_usr
+                text: 'who?'
+                font_size: "20sp"
+                on_release: root.show_usrls()
+
+            DropDown:
+                id: usr_ls
+                on_select: slt_usr.text = '{}'.format(args[1])
+            
+
+
         Button:
             size_hint: None, None
             size: 100, 60
