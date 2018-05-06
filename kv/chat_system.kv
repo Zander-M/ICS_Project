@@ -54,7 +54,7 @@
             on_press: root.usrlgin()
 
 <command>:
-
+    on_enter: self.ids['cmd_usrn'].text = 'Hello, ' + app.usrn + '\nWhat do you want to do?'
     BoxLayout:
         orientation: "horizontal"
         size: root.size

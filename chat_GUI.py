@@ -48,9 +48,9 @@ class command(Screen):
         super(Screen, self).__init__(**kwargs)
     # logged in stage panel.
     
-    def on_enter(self, *args):
-        app = App.get_running_app()
-        self.ids['cmd_usrn'].text = "Hello, " + app.usrn + '\nWhat do you want to do?' # change the username on the command panel
+    # def on_enter(self, *args):
+    #     app = App.get_running_app()
+    #     self.ids['cmd_usrn'].text = "Hello, " + app.usrn + '\nWhat do you want to do?' # change the username on the command panel
 
     def bye(self):
         # log out of the system
@@ -97,6 +97,7 @@ class Chat_GUI(App):
         trans.trans.append(text)
         
     def popup(self, msg):
+        # popup window. pass in message to pop up. click ok to close.
         p = notice()
         p.ids['msg'].text = msg
         p.open()
