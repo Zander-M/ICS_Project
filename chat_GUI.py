@@ -3,12 +3,11 @@ from kivy.app import App
 from kivy.uix.textinput import TextInput
 from kivy.uix.label import Label
 from kivy.uix.button import Button
+from kivy.uix.widget import Widget
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.widget import Widget
 from kivy.uix.scrollview import ScrollView
-from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty
 from kivy.uix.screenmanager import Screen, ScreenManager
@@ -20,6 +19,7 @@ import trans
 # Builder.load_file("kv\\command.kv") # test command
 # Builder.load_file("kv\\sonnet.kv") # test sonnet
 # Builder.load_file("kv\\chatting.kv")
+
 
 class login(Screen):
    
@@ -50,7 +50,7 @@ class command(Screen):
     
     def __init__(self, **kwargs):
         super(Screen, self).__init__(**kwargs)
-    # logged in stage panel.
+           # logged in stage panel.
     
     # def on_enter(self, *args):
     #     app = App.get_running_app()
@@ -67,6 +67,8 @@ class chat_with(Screen):
     def show_usrls(self):
         app = App.get_running_app()
         app.getusrls()
+        while app.usrls == []:
+            pass
         self.ids['usrls'].clear_widgets()
         if len(app.usrls) > 1 : # update the dropdown list 
             for i in app.usrls.keys():
@@ -74,13 +76,25 @@ class chat_with(Screen):
                     btn = Button(text=i, size_hint_y=None, height=60)
                     btn.bind(on_release=lambda btn: self.ids['usrls'].select(btn.text))
                     self.ids['usrls'].add_widget(btn)
+                else:
+                    pass
             self.ids['usrls'].open(self.ids['slt_usr'])
         # if len(app.usrls) != 0: 
         #     for i in app.usrls:
         #         self.ids['usr_ls'].add_widget(Button(text=i, on_release=parent.select(i)))
         else:
             app.popup('Oops, no available user!')
+    
+    def connect(self):
+        app = App.get_running_app()
+        app.cmd('c'+ self.ids['slt_usr'].text)
+        if trans.system_msg[0] == 'Y':
+            app.scrm.current = 'chatting'
+        else:
+            app.popup('Oops, something went wrong...')
         
+    def reset(self):
+        self.ids['slt_usr'].text = 'who?'
 
 class chatting(Screen):
     # chatting stage panel
@@ -104,6 +118,10 @@ class Chat_GUI(App):
         self.usrn = '' # variable that stores the username
         self.notice = '' # content of the popup window
         self.usrls = [] # current usr in dict
+        self.listen = threading.Thread(target=self.listen)
+        self.listen.start()
+        self.listen.join()
+        self.trdlock = threading.Lock()
 
     def build(self):
         Builder.load_file("kv\\chat_system.kv") # load layout files 
@@ -114,7 +132,7 @@ class Chat_GUI(App):
         self.scrm.add_widget(chatting(name='chatting'))
         self.scrm.add_widget(sonnet(name='sonnet'))
         return self.scrm
-    
+
     def cmd(self, text):
         trans.trans.append(text)
     
@@ -127,8 +145,7 @@ class Chat_GUI(App):
             pass
         import ast
         self.usrls = ast.literal_eval(trans.system_msg)
-        return
-        
+        return 
         
     def popup(self, msg):
         # popup window. pass in message to pop up. click ok to close.
@@ -136,6 +153,14 @@ class Chat_GUI(App):
         p.ids['msg'].text = msg
         p.open()
         self.notice = ''
+    
+    # def listen(self):
+    #     while self.scrm.current == 'command' and trans.system_msg[0] == 'R':
+    #         self.trdlock.acquire()
+    #         self.popup('Request from: {}'.format(trans.system_msg[13: trans.system_msg.find('/')]))
+    #         self.scrm.current = 'chatting'
+    #         self.trdlock.release()
+
     
     # chatThread.start()    
     # def update(self, screen):

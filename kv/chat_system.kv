@@ -180,6 +180,8 @@
                 font_size: '20sp'
 
 <chat_with>:
+    on_pre_enter: root.reset()
+
     GridLayout:
         cols: 1
         
@@ -200,15 +202,14 @@
 
         DropDown:
             id: usrls
-            on_select: lambda instance, x: setattr(slt_usr, 'text', x )
-
+            on_select: slt_usr.text = args[1]
 
         Button:
             size_hint: None, None
             size: 100, 60
             text: 'Join'
             font_size: '20sp'
-            on_press: root.manager.current = 'chatting'
+            on_press: root.connect()
 
                 
 <peermsg>:
@@ -234,6 +235,21 @@
         Button:
             text: 'OK'
             on_press: root.dismiss()
+
+<yes_no>:
+    size_hint: .5, .5
+    auto_dismiss: False
+    title: "Notice"
+    GridLayout:
+        cols: 1
+        Label:
+            id: msg
+        BoxLayout:
+            orientation: "horizontal"
+            Button:
+                text: "Yes"
+            Button:
+                text: "No"
 
 
  
