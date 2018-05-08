@@ -9,6 +9,8 @@ import base64
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import numpy as np
+import kivy
+from kivy.app import App
 import random
 from PIL import Image
 plt.ion()
@@ -65,6 +67,8 @@ class ClientSM:
 # This is event handling instate "S_LOGGEDIN"
 #==============================================================================
         if self.state == S_LOGGEDIN:
+            app = App.get_running_app()
+            app.scrm.current = 'command' # change the screen to command stage
             # todo: can't deal with multiple lines yet
             if len(my_msg) > 0:
 
@@ -129,6 +133,8 @@ class ClientSM:
 # This is event handling instate "S_CHATTING"
 #==============================================================================
         elif self.state == S_CHATTING:
+            app = App.get_running_app()
+            app.scrm.current = 'chatting'  # change the screen to chatting stage
             if len(my_msg) > 0:     # my stuff going out
                 if my_msg[0] == "b" and my_msg[1] == "'":
                     raw_IMAGE_NAME = my_msg[2:len(my_msg)-1]

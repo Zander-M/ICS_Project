@@ -46,12 +46,21 @@ class login(Screen):
 class notice(Popup):
     pass
 
+class selfmsg(Label):
+    pass
+
+class peermsg(Label):
+    pass
+
 class command(Screen):
     
     def __init__(self, **kwargs):
         super(Screen, self).__init__(**kwargs)
            # logged in stage panel.
     
+    def showUsr(self):
+        app = App.get_running_app()
+        app.showUsr()
     # def on_enter(self, *args):
     #     app = App.get_running_app()
     #     self.ids['cmd_usrn'].text = "Hello, " + app.usrn + '\nWhat do you want to do?' # change the username on the command panel
@@ -62,17 +71,20 @@ class command(Screen):
         trans.trans.append('q')
         app.stop()
 
-class chat_with(Screen):
+class chat_with(Popup):
+    
+    def __init__(self, **kwargs):
+        super().__init__()
+        self.app = App.get_running_app()
     
     def show_usrls(self):
-        app = App.get_running_app()
-        app.getusrls()
-        while app.usrls == []:
+        self.app.getusrls()
+        while self.app.usrls == []:
             pass
         self.ids['usrls'].clear_widgets()
-        if len(app.usrls) > 1 : # update the dropdown list 
-            for i in app.usrls.keys():
-                if i != app.usrn:
+        if len(self.app.usrls) > 1 : # update the dropdown list 
+            for i in self.app.usrls.keys():
+                if i != self.app.usrn:
                     btn = Button(text=i, size_hint_y=None, height=60)
                     btn.bind(on_release=lambda btn: self.ids['usrls'].select(btn.text))
                     self.ids['usrls'].add_widget(btn)
@@ -83,20 +95,49 @@ class chat_with(Screen):
         #     for i in app.usrls:
         #         self.ids['usr_ls'].add_widget(Button(text=i, on_release=parent.select(i)))
         else:
-            app.popup('Oops, no available user!')
+            self.app.popup('Oops, no available user!')
     
     def connect(self):
-        app = App.get_running_app()
-        app.cmd('c'+ self.ids['slt_usr'].text)
-        if trans.system_msg[0] == 'Y':
-            app.scrm.current = 'chatting'
-        else:
-            app.popup('Oops, something went wrong...')
+        self.app.cmd('c'+ self.ids['slt_usr'].text)
+        while trans.system_msg == '':
+            pass
+        self.dismiss()
+        # if trans.system_msg[0] == 'Y':
+        #     app.scrm.current = 'chatting'
+        # else:
+        #     app.popup('Oops, something went wrong...')
         
     def reset(self):
         self.ids['slt_usr'].text = 'who?'
 
 class chatting(Screen):
+
+    def __init__(self, **kwargs):
+        super(chatting, self).__init__(**kwargs)
+        self.trdlock = threading.Lock()
+        # self.listen = threading.Thread(target=self.listen())
+        # self.listen.start()
+        # self.listen.join()
+
+    def send(self):
+        app = App.get_running_app()
+        if self.ids['msg'].text == '':
+            app.popup("Can't send empty message!")
+            return
+        else:
+            app.cmd(self.ids['msg'].text)
+            self.ids['display'].text += '['+ app.usrn + ']:\n' + self.ids['msg'].text + '\n\n'
+            self.ids['msg'].text = ''
+            return
+    
+    # def listen(self):
+    #     while trans.system_msg != '':
+    #         self.trdlock.acquire()
+    #         self.ids['display'].text += trans.system_msg
+    #         if trans.system_msg == 'bye':
+    #             break
+    #         self.trdlock.release()
+        return
     # chatting stage panel
     pass
 
@@ -118,17 +159,17 @@ class Chat_GUI(App):
         self.usrn = '' # variable that stores the username
         self.notice = '' # content of the popup window
         self.usrls = [] # current usr in dict
-        self.listen = threading.Thread(target=self.listen)
-        self.listen.start()
-        self.listen.join()
-        self.trdlock = threading.Lock()
+        # self.listen = threading.Thread(target=self.listen)
+        # self.listen.start()
+        # self.listen.join()
+        # self.trdlock = threading.Lock()
 
     def build(self):
         Builder.load_file("kv\\chat_system.kv") # load layout files 
         self.scrm = ScreenManager()
         self.scrm.add_widget(login(name='login'))
         self.scrm.add_widget(command(name='command', id='command'))
-        self.scrm.add_widget(chat_with(name='chat_with'))
+        # self.scrm.add_widget(chat_with(name='chat_with'))
         self.scrm.add_widget(chatting(name='chatting'))
         self.scrm.add_widget(sonnet(name='sonnet'))
         return self.scrm
@@ -146,7 +187,15 @@ class Chat_GUI(App):
         import ast
         self.usrls = ast.literal_eval(trans.system_msg)
         return 
-        
+    
+    def showUsr(self):
+        p = chat_with()
+        p.open()
+
+    def chat(self, text):   
+        self.scrm.screens[2].ids['display'].text += text + '\n' # adding peer msg
+        pass
+
     def popup(self, msg):
         # popup window. pass in message to pop up. click ok to close.
         p = notice()

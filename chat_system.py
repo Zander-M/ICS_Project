@@ -25,6 +25,7 @@ class ChatSystem:
     #     # reading_thread.daemon = True
     #     # reading_thread.start()
     
+        cols: 1
 
     def run_app(self):
         self.g_sys.run()

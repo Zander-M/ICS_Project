@@ -5,6 +5,8 @@ Created on Sun Apr  5 00:00:32 2015
 """
 from chat_utils import *
 import json
+import kivy
+from kivy.app import App
 
 class ClientSM:
     def __init__(self, s):
@@ -56,6 +58,8 @@ class ClientSM:
 # This is event handling instate "S_LOGGEDIN"
 #==============================================================================
         if self.state == S_LOGGEDIN:
+            app = App.get_running_app()
+            app.scrm.current = 'command' # change the screen to command stage
             # todo: can't deal with multiple lines yet
             if len(my_msg) > 0:
 
@@ -120,6 +124,8 @@ class ClientSM:
 # This is event handling instate "S_CHATTING"
 #==============================================================================
         elif self.state == S_CHATTING:
+            app = App.get_running_app()
+            app.scrm.current = 'chatting'  # change the screen to chatting stage
             if len(my_msg) > 0:     # my stuff going out
                 mysend(self.s, json.dumps({"action":"exchange", "from":"[" + self.me + "]", "message":my_msg}))
                 if my_msg == 'bye':
@@ -133,7 +139,7 @@ class ClientSM:
                 elif peer_msg["action"] == "disconnect":
                     self.state = S_LOGGEDIN
                 else:
-                    self.out_msg += peer_msg["from"] + peer_msg["message"]
+                    self.out_msg += peer_msg["from"] + ':\n' + peer_msg["message"] + '\n'
 
 
             # Display the menu again

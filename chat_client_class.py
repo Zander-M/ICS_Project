@@ -8,6 +8,8 @@ from chat_utils import *
 import client_state_machine as csm
 import threading
 import trans
+import kivy
+from kivy.app import App
 
 class Client:
     def __init__(self, **args):
@@ -62,6 +64,13 @@ class Client:
             print(trans.system_msg)
             trans.system_msg = ''
 
+    def send_chat(self):
+        if len(trans.system_msg) > 0:
+            app = App.get_running_app()
+            app.chat(trans.system_msg)
+            print(trans.system_msg)
+            trans.system_msg = ''
+
     def login(self):
         my_msg, peer_msg = self.get_msgs()
         if len(my_msg) > 0:
@@ -101,7 +110,10 @@ class Client:
         self.output()
         while self.sm.get_state() != S_OFFLINE:
             self.proc()
-            self.output()
+            if self.sm.get_state() == S_LOGGEDIN:
+                self.output()
+            elif self.sm.get_state() == S_CHATTING:
+                self.send_chat()    
             time.sleep(CHAT_WAIT)
         self.quit()
 
